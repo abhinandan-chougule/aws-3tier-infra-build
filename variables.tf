@@ -76,8 +76,8 @@ variable "ec2_key_name" {
 }
 
 variable "app_instance_type" {
-  type        = string
-  default     = "t3.micro"
+  type    = string
+  default = "t3.micro"
 }
 
 variable "app_ami_id" {
@@ -86,48 +86,48 @@ variable "app_ami_id" {
 }
 
 variable "asg_desired" {
-  type        = number
-  default     = 2
+  type    = number
+  default = 2
 }
 
 variable "asg_min" {
-  type        = number
-  default     = 2
+  type    = number
+  default = 2
 }
 
 variable "asg_max" {
-  type        = number
-  default     = 4
+  type    = number
+  default = 4
 }
 
 variable "db_engine" {
-  type        = string
-  default     = "postgres"
+  type    = string
+  default = "postgres"
 }
 
 variable "db_engine_version" {
-  type        = string
-  default     = "15.4"
+  type    = string
+  default = "15.4"
 }
 
 variable "db_instance_class" {
-  type        = string
-  default     = "db.t3.micro"
+  type    = string
+  default = "db.t3.micro"
 }
 
 variable "db_name" {
-  type        = string
-  default     = "appdb"
+  type    = string
+  default = "appdb"
 }
 
 variable "db_username" {
-  type        = string
-  default     = "appuser"
+  type    = string
+  default = "appuser"
 }
 
 variable "db_password" {
-  type        = string
-  sensitive   = true
+  type      = string
+  sensitive = true
 }
 
 variable "tf_state_bucket" {
@@ -140,4 +140,15 @@ variable "tf_state_lock_table" {
   type        = string
   description = "DynamoDB table for state locking (optional)"
   default     = null
+}
+variable "db_port" {
+  description = "Port number for the database"
+  type        = number
+  default     = 5432 # Postgres default
+}
+
+variable "allowed_cidr_blocks" {
+  description = "CIDR blocks allowed to access the DB"
+  type        = list(string)
+  default     = ["10.10.0.0/16"] # or your app subnet CIDRs
 }

@@ -22,3 +22,4 @@ output "artifact_bucket" {
   value       = module.s3_artifacts.bucket_name
   description = "Artifact S3 bucket name"
 }
+

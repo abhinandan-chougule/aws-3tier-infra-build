@@ -1,11 +1,67 @@
-variable "project_name" {}
-variable "vpc_id" {}
-variable "private_db_subnet_ids" { type = list(string) }
-variable "db_engine" {}
-variable "db_engine_version" {}
-variable "db_instance_class" {}
-variable "db_name" {}
-variable "db_username" {}
-variable "db_password" { sensitive = true }
-variable "app_security_group_id" {}
-variable "tags" { type = map(string) }
+# Database engine and version
+variable "db_engine" {
+  description = "Database engine (postgres, mysql, etc.)"
+  type        = string
+  default     = "postgres"
+}
+
+variable "db_engine_version" {
+  description = "Version of the database engine"
+  type        = string
+  default     = "15.4"
+}
+
+# Instance configuration
+variable "db_instance_class" {
+  description = "Instance type for RDS"
+  type        = string
+  default     = "db.t3.micro"
+}
+
+variable "db_allocated_storage" {
+  description = "Allocated storage in GB"
+  type        = number
+  default     = 20
+}
+
+# Database name and credentials
+variable "db_name" {
+  description = "Database name"
+  type        = string
+  default     = "appdb"
+}
+
+variable "db_username" {
+  description = "Master username for the database"
+  type        = string
+  default     = "appuser"
+}
+
+variable "db_password" {
+  description = "Master password for the database"
+  type        = string
+  sensitive   = true
+}
+
+# Networking
+variable "db_port" {
+  description = "Port number for the database"
+  type        = number
+  default     = 5432
+}
+
+variable "allowed_cidr_blocks" {
+  description = "CIDR blocks allowed to access the DB"
+  type        = list(string)
+  default     = ["10.10.11.0/24", "10.10.12.0/24"] # private app subnets
+}
+
+variable "private_db_subnet_ids" {
+  description = "List of subnet IDs for DB subnet group"
+  type        = list(string)
+}
+
+variable "vpc_id" {
+  description = "VPC ID where RDS will be deployed"
+  type        = string
+}
