@@ -99,12 +99,12 @@ variable "app_ami_id" {
 
 variable "asg_desired" {
   type    = number
-  default = 1
+  default = 2
 }
 
 variable "asg_min" {
   type    = number
-  default = 1
+  default = 2
 }
 
 variable "asg_max" {
@@ -156,7 +156,7 @@ variable "tf_state_lock_table" {
 variable "db_port" {
   description = "Port number for the database"
   type        = number
-  default     = 5432 # Postgres default
+  default     = 3306 # MySQL default
 }
 
 variable "allowed_cidr_blocks" {

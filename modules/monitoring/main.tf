@@ -13,17 +13,17 @@ resource "aws_sns_topic_subscription" "email" {
 resource "aws_cloudwatch_metric_alarm" "tg_unhealthy" {
   alarm_name          = "${var.project_name}-unhealthy-hosts"
   comparison_operator = "GreaterThanThreshold"
-  threshold           = 0
-  evaluation_periods  = 1
-  datapoints_to_alarm = 1
+  threshold           = 1
+  evaluation_periods  = 2
+  datapoints_to_alarm = 2
   metric_name         = "UnHealthyHostCount"
   namespace           = "AWS/ApplicationELB"
   period              = 60
   statistic           = "Average"
 
   dimensions = {
-    TargetGroup = var.target_group_arn
-    LoadBalancer = "*"
+    TargetGroup = var.tg_name
+    LoadBalancer = var.alb_name
   }
 
   alarm_description = "Unhealthy hosts detected in target group"

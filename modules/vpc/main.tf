@@ -105,9 +105,19 @@ resource "aws_route_table_association" "private_db_assoc" {
 # Security Groups
 resource "aws_security_group" "alb" {
   name        = "${var.project_name}-alb-sg"
-  description = "ALB SG"
+  description = "ALB Security Group"
   vpc_id      = aws_vpc.this.id
 
+  # Allow inbound HTTP (port 80) from anywhere
+  ingress {
+    description = "HTTP"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  # Allow inbound HTTPS (port 443) from anywhere
   ingress {
     description = "HTTPS"
     from_port   = 443
@@ -116,6 +126,7 @@ resource "aws_security_group" "alb" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  # Allow all outbound traffic
   egress {
     from_port   = 0
     to_port     = 0
@@ -156,8 +167,8 @@ resource "aws_security_group" "db" {
 
   ingress {
     description     = "DB from app"
-    from_port       = 5432
-    to_port         = 5432
+    from_port       = 3306
+    to_port         = 3306
     protocol        = "tcp"
     security_groups = [aws_security_group.app.id]
   }

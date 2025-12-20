@@ -59,51 +59,53 @@ resource "aws_launch_template" "app" {
     name = aws_iam_instance_profile.app_profile.name
   }
 
-  user_data = base64encode(<<-EOT
+user_data = base64encode(<<-EOT
 #!/bin/bash
 set -eux
 
 # ===== Update system and install dependencies =====
-sudo yum update -y
-sudo yum install -y java-11-amazon-corretto git unzip
+apt update -y
+apt upgrade -y
+apt install -y openjdk-17-jdk-headless curl unzip
 
 # ===== Install AWS CLI v2 =====
-curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.30.6.zip" -o "/tmp/awscliv2.zip"
+cd /tmp
 unzip awscliv2.zip
-sudo ./aws/install
+./aws/install
 aws --version
 
 # ===== Fetch the Spring Boot JAR from S3 =====
-aws s3 cp "s3://${var.artifact_bucket_name}/${var.artifact_object_key}" /home/ec2-user/app.jar
-sudo chown ec2-user:ec2-user /home/ec2-user/app.jar
+aws s3 cp "s3://${var.artifact_bucket_name}/${var.artifact_object_key}" /home/ubuntu/app.jar
+chown ubuntu:ubuntu /home/ubuntu/app.jar
 
 # ===== Create a systemd service =====
-sudo bash -c 'cat > /etc/systemd/system/petclinic.service <<EOF
+cat > /etc/systemd/system/petclinic.service <<EOF
 [Unit]
 Description=PetClinic Spring Boot App
 After=network.target
 
 [Service]
-User=ec2-user
-WorkingDirectory=/home/ec2-user
+User=ubuntu
+WorkingDirectory=/home/ubuntu
 Environment=SPRING_PROFILES_ACTIVE=mysql
 Environment=SPRING_DATASOURCE_URL=jdbc:mysql://${var.db_host}:${var.db_port}/${var.db_name}?useSSL=false&allowPublicKeyRetrieval=true
 Environment=SPRING_DATASOURCE_USERNAME=${var.db_username}
 Environment=SPRING_DATASOURCE_PASSWORD=${var.db_password}
-ExecStart=/usr/bin/java -jar /home/ec2-user/app.jar
+ExecStart=/usr/bin/java -jar /home/ubuntu/app.jar
 SuccessExitStatus=143
 Restart=on-failure
 RestartSec=10
 
 [Install]
 WantedBy=multi-user.target
-EOF'
+EOF
 
-sudo systemctl daemon-reload
-sudo systemctl enable petclinic
-sudo systemctl start petclinic
+systemctl daemon-reload
+systemctl enable petclinic
+systemctl start petclinic
 EOT
-  )
+)
 
   tag_specifications {
     resource_type = "instance"

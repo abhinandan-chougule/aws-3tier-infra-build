@@ -123,6 +123,8 @@ module "route53" {
 module "monitoring" {
   source           = "./modules/monitoring"
   project_name     = var.project_name
+  alb_name         = module.alb.alb_name
+  tg_name          = module.alb.tg_name
   sns_alert_email  = var.sns_alert_email
   target_group_arn = module.alb.target_group_arn
   tags             = local.tags

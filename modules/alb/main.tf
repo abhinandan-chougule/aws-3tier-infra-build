@@ -27,12 +27,10 @@ resource "aws_lb_target_group" "app" {
   tags = merge(var.tags, { Name = "${var.project_name}-tg" })
 }
 
-resource "aws_lb_listener" "https" {
+resource "aws_lb_listener" "http" {
   load_balancer_arn = aws_lb.this.arn
-  port              = 443
-  protocol          = "HTTPS"
-  ssl_policy        = "ELBSecurityPolicy-2016-08"
-  certificate_arn   = var.alb_certificate_arn
+  port              = 80
+  protocol          = "HTTP"
 
   default_action {
     type             = "forward"
@@ -42,3 +40,5 @@ resource "aws_lb_listener" "https" {
 
 output "target_group_arn" { value = aws_lb_target_group.app.arn }
 output "alb_dns_name"     { value = aws_lb.this.dns_name }
+output "alb_name"        { value = aws_lb.this.name }
+output "tg_name"         { value = aws_lb_target_group.app.name }
