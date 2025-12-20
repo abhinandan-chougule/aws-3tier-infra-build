@@ -1,7 +1,7 @@
 # ===== Get latest Ubuntu AMI =====
 data "aws_ami" "ubuntu" {
   most_recent = true
-  owners      = ["099720109477"] # Canonical (official Ubuntu publisher)
+  owners      = length(var.ami_owner_id) > 0 ? [var.ami_owner_id] : ["amazon"]
 
   filter {
     name   = "name"
