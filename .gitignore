@@ -22,3 +22,4 @@ terraform.rc
 
 # Local .terraform directory
 .terraform/
+.DS_Store
