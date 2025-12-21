@@ -23,19 +23,19 @@ vpc_id                  = "vpc-09b380dbf35f92b68"            # replace with your
 admin_cidr = "10.10.1.0/24"
 
 # Domain & certificate
-domain_name            = "mytestproject.shop"     # your root domain in Route53
-hosted_zone_id         = "Z046632710MI15V3WFY7"   # replace with actual Hosted Zone ID
-alb_certificate_domain = "api.mytestproject.shop" # subdomain for ALB SSL cert
+domain_name            = "mytxxxxxxxx.com"     # your root domain in Route53
+hosted_zone_id         = "Z0xxxxxxxxxxxxFY7"   # replace with actual Hosted Zone ID
+alb_certificate_domain = "api.mytxxxxxxxt.com" # subdomain for ALB SSL cert
 
 # EC2 & app
-ec2_key_name         = "abhi-prod-keypair"     # must exist in AWS EC2 Key Pairs
-app_ami_id           = "ami-0c687e8f5c4e54af5" # latest Amazon Linux 2 or hardened AMI
-artifact_bucket_name = "mypro-artifacts-prod"  # S3 bucket holding your JAR
+ec2_key_name         = "test-my-prod-keypair"  # must exist in AWS EC2 Key Pairs
+app_ami_id           = "ami-0cxxxxxxxxxxxxaf5" # latest Amazon Ubuntu or hardened AMI
+artifact_bucket_name = "my-artifacts-prod"     # S3 bucket holding your JAR
 artifact_object_key  = "spring-petclinic.jar"  # path to your app artifact
 
 # Database
-db_password     = "ProdSecurePassword123!" # store securely, don't commit to GitHub
-sns_alert_email = "askchougule@gmail.com"  # CloudWatch alarm notifications
+db_password     = "myRDSpassword123!"      # store securely, don't commit to GitHub
+sns_alert_email = "abc@gmail.com"          # CloudWatch alarm notifications
 
 
 
