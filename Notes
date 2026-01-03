@@ -9,12 +9,16 @@ Choose Any one option to configure AWS and VSCode
 Get your AWS Access Key ID & Secret Access Key
 1.	Sign in to AWS Management Console 
              Log in with your root account or an IAM user that has admin privileges.
+
 2.	Create a user
 	If not, create a new IAM user (recommended) with programmatic access.
+
 3.	Attach permissions
 	For testing, you can attach AdministratorAccess.
+
 4.	Create access keys
 	Under Security credentials, click Create access key.
+
 5.	AWS will generate: 
 	Access Key ID (looks like AKIAxxxxxxxxxxxx)
 	Secret Access Key (long alphanumeric string)
@@ -109,43 +113,10 @@ Step 3: Validation
     export AWS_PROFILE=terraform-admin
     aws sts get-caller-identity
 ------------------------------------------------------------------------------------------------------------
-- **Troubleshooting:**
+- **Q n A and Troubleshooting:**
   - If `aws` isn’t found, reopen your terminal or check PATH.
   - If identity is wrong, ensure the correct profile is set and credentials aren’t overridden by environment variables.
-
+  - AWS will not allow duplicate S3 bucket globally
+  - AWS will not allow same secrete names in secrete manager which are deleted within last 7 days
+  - Domain name and Hosted zone required if you want to replicate real world scenario
 ############################################################################################################
-# Export AWS Credentials
-
-export AWS_PROFILE=terraform-admin
-
-# Verify acccount
-aws sts get-caller-identity --profile terraform-admin
-
-# Terraform, plan, apply and Destroy infra
-terraform plan -var-file=prod.tfvars
-terraform apply -var-file=prod.tfvars -auto-approve
-terraform destroy -var-file=prod.tfvars
-
-# Clone application repo
-git clone https://github.com/abhinandan-chougule/aws-3tier-infra-build.git
-
-git clone https://github.com/abhinandan-chougule/spring-boot-petclinic-code.git
-
-# Copy to S3 (Copy two .jar and paste into one single .jar on S3 bucket)
-aws s3 cp target/spring-petclinic-*.jar s3://mypro-artifacts-prod/spring-petclinic.jar
-
-# Connect RDS from Bastion Host
-mysql -h <rds-endpoint> -u <db-username> -p
-
-Ex. mysql -h petclinic-prod-db.cj6wac0qyd0w.ap-southeast-1.rds.amazonaws.com -u appuser -p
-(Password: myRDSpassword123!)
-
-# In mysql shell:
-CREATE DATABASE petclinic;
-GRANT ALL PRIVILEGES ON petclinic.* TO 'appuser'@'%';
-FLUSH PRIVILEGES;
-
-SHOW DATABASES;
-USE petclinic;
-SHOW TABLES;
-SELECT * FROM owners LIMIT 50;
